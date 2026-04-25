@@ -4,18 +4,32 @@ import { useRouter } from 'expo-router';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { loginUser } from '../../src/services/authService';
+import { validateLoginForm } from '../../src/utils/validators';
 
 export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const handleEmailChange = (value) => {
+    setEmail(value);
+    if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
+  };
+
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
+  };
+
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Campos requeridos', 'Ingresa tu correo y contraseña.');
+    const validationErrors = validateLoginForm({ email, password });
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+
     try {
       setLoading(true);
       await loginUser({ email, password });
@@ -32,21 +46,26 @@ export default function LoginScreen() {
       <Text style={styles.title}>Iniciar sesión</Text>
       <Text style={styles.subtitle}>Ingresa tus datos para continuar</Text>
 
-      <Input
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
-      <Input
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.field}>
+        <Input
+          placeholder="Correo electrónico"
+          value={email}
+          onChangeText={handleEmailChange}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          error={errors.email}
+        />
+      </View>
+
+      <View style={styles.field}>
+        <Input
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={handlePasswordChange}
+          secureTextEntry
+          error={errors.password}
+        />
+      </View>
 
       {loading ? (
         <ActivityIndicator size="large" color="#0a7ea4" style={styles.button} />
@@ -86,7 +105,7 @@ const styles = StyleSheet.create({
     color: '#475569',
     marginBottom: 24,
   },
-  input: {
+  field: {
     marginBottom: 16,
   },
   button: {

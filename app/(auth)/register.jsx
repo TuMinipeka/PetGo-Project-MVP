@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { registerUser } from '../../src/services/authService';
+import { validateRegisterForm } from '../../src/utils/validators';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -15,31 +16,30 @@ export default function RegisterScreen() {
     password: '',
     confirmPassword: '',
   });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const set = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }));
+  const set = (field) => (value) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
+  };
 
   const handleRegister = async () => {
-    const { nombre, email, ciudad, telefono, password, confirmPassword } = form;
-
-    if (!nombre || !email || !ciudad || !telefono || !password || !confirmPassword) {
-      Alert.alert('Campos incompletos', 'Por favor completa todos los campos.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Las contraseñas no coinciden.');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres.');
+    const validationErrors = validateRegisterForm(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
     try {
       setLoading(true);
-      await registerUser({ nombre, email, ciudad, telefono, password });
+      await registerUser({
+        nombre: form.nombre,
+        email: form.email,
+        ciudad: form.ciudad,
+        telefono: form.telefono,
+        password: form.password,
+      });
       Alert.alert(
         'Registro exitoso',
         'Tu cuenta fue creada. Ya puedes iniciar sesión.',
@@ -57,47 +57,69 @@ export default function RegisterScreen() {
       <Text style={styles.title}>Crear cuenta</Text>
       <Text style={styles.subtitle}>Ingresa tus datos para registrarte</Text>
 
-      <Input
-        placeholder="Nombre completo"
-        value={form.nombre}
-        onChangeText={set('nombre')}
-        style={styles.input}
-      />
-      <Input
-        placeholder="Correo electrónico"
-        value={form.email}
-        onChangeText={set('email')}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
-      <Input
-        placeholder="Ciudad / Municipio"
-        value={form.ciudad}
-        onChangeText={set('ciudad')}
-        style={styles.input}
-      />
-      <Input
-        placeholder="Teléfono"
-        value={form.telefono}
-        onChangeText={set('telefono')}
-        keyboardType="phone-pad"
-        style={styles.input}
-      />
-      <Input
-        placeholder="Contraseña"
-        value={form.password}
-        onChangeText={set('password')}
-        secureTextEntry
-        style={styles.input}
-      />
-      <Input
-        placeholder="Confirmar contraseña"
-        value={form.confirmPassword}
-        onChangeText={set('confirmPassword')}
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.field}>
+        <Input
+          placeholder="Nombre completo"
+          value={form.nombre}
+          onChangeText={set('nombre')}
+          error={errors.nombre}
+        />
+      </View>
+
+      <View style={styles.field}>
+        <Input
+          placeholder="Correo electrónico"
+          value={form.email}
+          onChangeText={set('email')}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          error={errors.email}
+        />
+      </View>
+
+      <View style={styles.field}>
+        <Input
+          placeholder="Ciudad / Municipio"
+          value={form.ciudad}
+          onChangeText={set('ciudad')}
+          error={errors.ciudad}
+        />
+      </View>
+
+      <View style={styles.field}>
+        <Input
+          placeholder="Teléfono"
+          value={form.telefono}
+          onChangeText={set('telefono')}
+          keyboardType="phone-pad"
+          error={errors.telefono}
+        />
+      </View>
+
+      <View style={styles.field}>
+        <Input
+          placeholder="Contraseña"
+          value={form.password}
+          onChangeText={set('password')}
+          secureTextEntry
+          error={errors.password}
+        />
+        {!errors.password && (
+          <Text style={styles.hint}>
+            Mínimo 8 caracteres, una mayúscula, un número y un carácter especial.
+          </Text>
+        )}
+      </View>
+
+      <View style={styles.field}>
+        <Input
+          placeholder="Confirmar contraseña"
+          value={form.confirmPassword}
+          onChangeText={set('confirmPassword')}
+          secureTextEntry
+          error={errors.confirmPassword}
+        />
+      </View>
 
       {loading ? (
         <ActivityIndicator size="large" color="#0a7ea4" style={styles.loader} />
@@ -129,8 +151,14 @@ const styles = StyleSheet.create({
     color: '#475569',
     marginBottom: 24,
   },
-  input: {
+  field: {
     marginBottom: 16,
+  },
+  hint: {
+    fontSize: 12,
+    color: '#94a3b8',
+    marginTop: 4,
+    marginLeft: 2,
   },
   button: {
     marginTop: 8,
