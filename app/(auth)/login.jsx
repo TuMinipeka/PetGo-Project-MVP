@@ -1,17 +1,30 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
+import { loginUser } from '../../src/services/authService';
 
 export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    // Integrar la lógica de autenticación con Supabase o servicio.
-    console.log('Iniciar sesión con', email, password);
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Campos requeridos', 'Ingresa tu correo y contraseña.');
+      return;
+    }
+    try {
+      setLoading(true);
+      await loginUser({ email, password });
+      router.replace('/');
+    } catch (error) {
+      Alert.alert('Error al iniciar sesión', error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,7 +48,11 @@ export default function LoginScreen() {
         style={styles.input}
       />
 
-      <Button title="Ingresar" onPress={handleLogin} style={styles.button} />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0a7ea4" style={styles.button} />
+      ) : (
+        <Button title="Ingresar" onPress={handleLogin} style={styles.button} />
+      )}
 
       <Text style={styles.linkText} onPress={() => router.push('/forgot-password')}>
         Olvidé mi contraseña
