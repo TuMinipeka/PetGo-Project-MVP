@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView, ActivityIndicator, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
@@ -127,9 +127,13 @@ export default function RegisterScreen() {
         <Button title="Registrarme" onPress={handleRegister} style={styles.button} />
       )}
 
-      <Text style={styles.loginLink} onPress={() => router.push('/login')}>
-        ¿Ya tienes cuenta? Inicia sesión
-      </Text>
+      <Pressable onPress={() => router.push('/login')}>
+        {({ pressed }) => (
+          <Text style={[styles.loginLink, pressed && styles.linkPressed]}>
+            ¿Ya tienes cuenta? Inicia sesión
+          </Text>
+        )}
+      </Pressable>
     </ScrollView>
   );
 }
@@ -168,9 +172,13 @@ const styles = StyleSheet.create({
   },
   loginLink: {
     marginTop: 24,
-    color: '#0a7ea4',
+    color: '#F97316',
     fontSize: 15,
+    fontWeight: '600',
     textAlign: 'center',
     textDecorationLine: 'underline',
+  },
+  linkPressed: {
+    opacity: 0.55,
   },
 });

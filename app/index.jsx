@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import icon from '../assets/LogoPetGo.png';
 import { Button } from '../components/ui/button';
@@ -14,9 +14,13 @@ export default function HomeScreen() {
 
       <View style={styles.actions}>
         <Button title="Iniciar sesión" onPress={() => router.push('/login')} />
-        <Text style={styles.registerLink} onPress={() => router.push('/register')}>
-          ¿No tienes cuenta? Regístrate
-        </Text>
+        <Pressable onPress={() => router.push('/register')}>
+          {({ pressed }) => (
+            <Text style={[styles.registerLink, pressed && styles.linkPressed]}>
+              ¿No tienes cuenta? Regístrate
+            </Text>
+          )}
+        </Pressable>
       </View>
     </View>
   );
@@ -48,8 +52,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   registerLink: {
-    color: '#0a7ea4',
+    color: '#F97316',
     fontSize: 14,
+    fontWeight: '600',
     textDecorationLine: 'underline',
+  },
+  linkPressed: {
+    opacity: 0.6,
   },
 });

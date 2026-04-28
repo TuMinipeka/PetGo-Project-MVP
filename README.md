@@ -9,7 +9,7 @@ Aplicación móvil desarrollada con React Native y Expo.
 | Herramienta | Versión mínima | Instalación |
 |---|---|---|
 | Node.js | v18 o superior | [nodejs.org](https://nodejs.org/) |
-| npm | Incluido con Node | — |
+| npm / npx | Incluido con Node ≥ 5.2 | — |
 | Expo Go | Última disponible | [Android](https://play.google.com/store/apps/details?id=host.exp.exponent) · [iOS](https://apps.apple.com/app/expo-go/id982107779) |
 
 > Verifica tu versión de Node con `node --version` antes de continuar.
@@ -81,7 +81,7 @@ Asegúrate de que exista la tabla con esta estructura:
 
 ```bash
 # Inicia el servidor de desarrollo
-npm start
+npx expo start
 ```
 
 Se abrirá una terminal con un **código QR**.
@@ -93,7 +93,7 @@ Se abrirá una terminal con un **código QR**.
 **Requisito:** el celular y la computadora deben estar en la **misma red Wi-Fi**.
 
 1. Instala **Expo Go** en tu celular
-2. Corre `npm start` en la terminal
+2. Corre `npx expo start` en la terminal
 3. Escanea el código QR:
    - **Android**: desde la cámara o directamente dentro de Expo Go
    - **iOS**: desde la cámara nativa del teléfono
@@ -102,7 +102,7 @@ Se abrirá una terminal con un **código QR**.
 ### Si no estás en la misma red (túnel)
 
 ```bash
-npm start -- --tunnel
+npx expo start --tunnel
 ```
 
 Esto usa `ngrok` para crear una URL pública. Útil cuando el celular está en datos móviles o en otra red.
@@ -113,16 +113,16 @@ Esto usa `ngrok` para crear una URL pública. Útil cuando el celular está en d
 
 ```bash
 # Emulador Android (requiere Android Studio)
-npm run android
+npx expo start --android
 
 # Emulador iOS (solo macOS, requiere Xcode)
-npm run ios
+npx expo start --ios
 
 # Versión web en el navegador
-npm run web
+npx expo start --web
 
 # Revisar errores de código (linter)
-npm run lint
+npx expo lint
 ```
 
 ---
@@ -213,7 +213,7 @@ git push origin feature/mi-funcionalidad
 
 | Error | Causa | Solución |
 |---|---|---|
-| `Network request failed` | Celular y PC en redes distintas | Usa `npm start -- --tunnel` |
+| `Network request failed` | Celular y PC en redes distintas | Usa `npx expo start --tunnel` |
 | `email rate limit exceeded` | Límite de emails en Supabase free | Desactiva "Confirm email" en Supabase |
 | `supabaseUrl is required` | Falta el archivo `.env` | Crea el `.env` desde `.env.example` |
 | QR no escanea | Firewall o red corporativa | Usa `--tunnel` o prueba en emulador |

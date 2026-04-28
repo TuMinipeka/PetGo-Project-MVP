@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Alert, ActivityIndicator, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
@@ -73,15 +73,23 @@ export default function LoginScreen() {
         <Button title="Ingresar" onPress={handleLogin} style={styles.button} />
       )}
 
-      <Text style={styles.linkText} onPress={() => router.push('/forgot-password')}>
-        Olvidé mi contraseña
-      </Text>
+      <Pressable onPress={() => router.push('/forgot-password')}>
+        {({ pressed }) => (
+          <Text style={[styles.linkText, pressed && styles.linkPressed]}>
+            Olvidé mi contraseña
+          </Text>
+        )}
+      </Pressable>
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>¿No tienes cuenta?</Text>
-        <Text style={styles.footerLink} onPress={() => router.push('/register')}>
-          Regístrate
-        </Text>
+        <Pressable onPress={() => router.push('/register')}>
+          {({ pressed }) => (
+            <Text style={[styles.footerLink, pressed && styles.linkPressed]}>
+              Regístrate
+            </Text>
+          )}
+        </Pressable>
       </View>
     </View>
   );
@@ -113,10 +121,11 @@ const styles = StyleSheet.create({
   },
   linkText: {
     marginTop: 18,
-    color: '#0a7ea4',
+    color: '#F97316',
     fontSize: 15,
     textAlign: 'center',
     textDecorationLine: 'underline',
+    fontWeight: '600',
   },
   footer: {
     marginTop: 32,
@@ -128,7 +137,10 @@ const styles = StyleSheet.create({
     color: '#64748b',
   },
   footerLink: {
-    color: '#0a7ea4',
-    fontWeight: '600',
+    color: '#F97316',
+    fontWeight: '700',
+  },
+  linkPressed: {
+    opacity: 0.55,
   },
 });
