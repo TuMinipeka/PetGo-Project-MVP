@@ -1,10 +1,19 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView, ActivityIndicator, Pressable } from 'react-native';
+import { View, Text, Alert, ScrollView, ActivityIndicator, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { registerUser } from '../../src/services/authService';
-import { validateRegisterForm } from '../../src/utils/validators';
+import {
+  validateRegisterForm,
+  validateNombre,
+  validateEmail,
+  validateCiudad,
+  validateTelefono,
+  validatePassword,
+  validateConfirmPassword,
+} from '../../src/utils/validators';
+import { styles } from './register.styles';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -19,9 +28,26 @@ export default function RegisterScreen() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const validate = (field, value, currentForm) => {
+    switch (field) {
+      case 'nombre':       return validateNombre(value);
+      case 'email':        return validateEmail(value);
+      case 'ciudad':       return validateCiudad(value);
+      case 'telefono':     return validateTelefono(value);
+      case 'password':     return validatePassword(value);
+      case 'confirmPassword':
+        return validateConfirmPassword(currentForm.password, value);
+      default: return null;
+    }
+  };
+
   const set = (field) => (value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
+    setForm((prev) => {
+      const next = { ...prev, [field]: value };
+      const err = validate(field, value, next);
+      setErrors((e) => ({ ...e, [field]: err }));
+      return next;
+    });
   };
 
   const handleRegister = async () => {
@@ -59,7 +85,7 @@ export default function RegisterScreen() {
 
       <View style={styles.field}>
         <Input
-          placeholder="Nombre completo"
+          placeholder="Nombre"
           value={form.nombre}
           onChangeText={set('nombre')}
           error={errors.nombre}
@@ -75,6 +101,9 @@ export default function RegisterScreen() {
           autoCapitalize="none"
           error={errors.email}
         />
+        {!errors.email && (
+          <Text style={styles.hint}>Solo se aceptan @gmail.com o @hotmail.com.</Text>
+        )}
       </View>
 
       <View style={styles.field}>
@@ -101,7 +130,7 @@ export default function RegisterScreen() {
           placeholder="Contraseña"
           value={form.password}
           onChangeText={set('password')}
-          secureTextEntry
+          showToggle
           error={errors.password}
         />
         {!errors.password && (
@@ -116,7 +145,7 @@ export default function RegisterScreen() {
           placeholder="Confirmar contraseña"
           value={form.confirmPassword}
           onChangeText={set('confirmPassword')}
-          secureTextEntry
+          showToggle
           error={errors.confirmPassword}
         />
       </View>
@@ -137,48 +166,3 @@ export default function RegisterScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 24,
-    paddingTop: 60,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 10,
-    color: '#0a7ea4',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#475569',
-    marginBottom: 24,
-  },
-  field: {
-    marginBottom: 16,
-  },
-  hint: {
-    fontSize: 12,
-    color: '#94a3b8',
-    marginTop: 4,
-    marginLeft: 2,
-  },
-  button: {
-    marginTop: 8,
-  },
-  loader: {
-    marginTop: 16,
-  },
-  loginLink: {
-    marginTop: 24,
-    color: '#F97316',
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-  },
-  linkPressed: {
-    opacity: 0.55,
-  },
-});

@@ -1,20 +1,22 @@
 // Retorna null si el valor es válido, o un string con el error si no lo es.
 
+const SOLO_TEXTO = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+
 export function validateNombre(value) {
   const v = value.trim();
   if (!v) return 'El nombre es requerido.';
   if (v.length < 2) return 'Debe tener al menos 2 caracteres.';
   if (v.length > 60) return 'No puede superar 60 caracteres.';
-  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(v))
-    return 'Solo puede contener letras y espacios.';
+  if (!SOLO_TEXTO.test(v)) return 'Solo puede contener letras y espacios.';
   return null;
 }
+
 
 export function validateEmail(value) {
   const v = value.trim();
   if (!v) return 'El correo es requerido.';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v))
-    return 'Ingresa un correo válido.';
+  if (!/^[^\s@]+@(gmail|hotmail)\.com$/i.test(v))
+    return 'Solo se aceptan correos @gmail.com o @hotmail.com.';
   return null;
 }
 
@@ -23,6 +25,7 @@ export function validateCiudad(value) {
   if (!v) return 'La ciudad o municipio es requerida.';
   if (v.length < 2) return 'Debe tener al menos 2 caracteres.';
   if (v.length > 80) return 'No puede superar 80 caracteres.';
+  if (!SOLO_TEXTO.test(v)) return 'Solo puede contener letras y espacios.';
   return null;
 }
 

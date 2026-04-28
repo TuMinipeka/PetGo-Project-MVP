@@ -1,35 +1,37 @@
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { View, TextInput, Text, Pressable } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { styles } from './input.styles';
 
-export function Input({ style, error, ...rest }) {
+export function Input({ style, error, showToggle, secureTextEntry, ...rest }) {
+  const [hidden, setHidden] = useState(true);
+
   return (
     <View>
-      <TextInput
-        style={[styles.input, error ? styles.inputError : null, style]}
-        placeholderTextColor="#687076"
-        {...rest}
-      />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <View style={styles.wrapper}>
+        <TextInput
+          style={[
+            styles.input,
+            showToggle && styles.inputWithToggle,
+            error ? styles.inputError : null,
+            style,
+          ]}
+          placeholderTextColor="#687076"
+          secureTextEntry={showToggle ? hidden : secureTextEntry}
+          {...rest}
+        />
+        {showToggle && (
+          <Pressable onPress={() => setHidden((h) => !h)} style={styles.toggle}>
+            <Ionicons name={hidden ? 'eye-off' : 'eye'} size={20} color="#687076" />
+          </Pressable>
+        )}
+      </View>
+      {error ? (
+        <View style={styles.errorBox}>
+          <Ionicons name="alert-circle-outline" size={14} color="#ef4444" />
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    fontSize: 16,
-    color: '#11181C',
-  },
-  inputError: {
-    borderColor: '#ef4444',
-  },
-  errorText: {
-    color: '#ef4444',
-    fontSize: 12,
-    marginTop: 4,
-    marginLeft: 2,
-  },
-});

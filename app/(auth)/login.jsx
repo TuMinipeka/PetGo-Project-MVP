@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet, Alert, ActivityIndicator, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Input } from '../../components/ui/input';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native';
 import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
 import { loginUser } from '../../src/services/authService';
 import { validateLoginForm } from '../../src/utils/validators';
+import { styles } from './login.styles';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function LoginScreen() {
           placeholder="Contraseña"
           value={password}
           onChangeText={handlePasswordChange}
-          secureTextEntry
+          showToggle
           error={errors.password}
         />
       </View>
@@ -94,53 +95,3 @@ export default function LoginScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 10,
-    color: '#0a7ea4',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#475569',
-    marginBottom: 24,
-  },
-  field: {
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 8,
-  },
-  linkText: {
-    marginTop: 18,
-    color: '#F97316',
-    fontSize: 15,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-    fontWeight: '600',
-  },
-  footer: {
-    marginTop: 32,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  footerText: {
-    color: '#64748b',
-  },
-  footerLink: {
-    color: '#F97316',
-    fontWeight: '700',
-  },
-  linkPressed: {
-    opacity: 0.55,
-  },
-});
