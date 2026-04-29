@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { View, Text, Alert, ScrollView, ActivityIndicator, Pressable } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Input } from '../../components/ui/input';
+import { BackButton } from '../../components/ui/BackButton';
 import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
 import { registerUser } from '../../src/services/authService';
 import {
   validateRegisterForm,
@@ -13,7 +14,7 @@ import {
   validatePassword,
   validateConfirmPassword,
 } from '../../src/utils/validators';
-import { styles } from './register.styles';
+import { styles } from './styles/register';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -30,11 +31,11 @@ export default function RegisterScreen() {
 
   const validate = (field, value, currentForm) => {
     switch (field) {
-      case 'nombre':       return validateNombre(value);
-      case 'email':        return validateEmail(value);
-      case 'ciudad':       return validateCiudad(value);
-      case 'telefono':     return validateTelefono(value);
-      case 'password':     return validatePassword(value);
+      case 'nombre':         return validateNombre(value);
+      case 'email':          return validateEmail(value);
+      case 'ciudad':         return validateCiudad(value);
+      case 'telefono':       return validateTelefono(value);
+      case 'password':       return validatePassword(value);
       case 'confirmPassword':
         return validateConfirmPassword(currentForm.password, value);
       default: return null;
@@ -80,14 +81,19 @@ export default function RegisterScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.title}>Crear cuenta</Text>
-      <Text style={styles.subtitle}>Ingresa tus datos para registrarte</Text>
+      <BackButton />
+
+      <View style={styles.header}>
+        <Text style={styles.title}>Crear cuenta</Text>
+        <Text style={styles.subtitle}>Ingresa tus datos para registrarte</Text>
+      </View>
 
       <View style={styles.field}>
         <Input
           placeholder="Nombre"
           value={form.nombre}
           onChangeText={set('nombre')}
+          maxLength={16}
           error={errors.nombre}
         />
       </View>
@@ -111,6 +117,7 @@ export default function RegisterScreen() {
           placeholder="Ciudad / Municipio"
           value={form.ciudad}
           onChangeText={set('ciudad')}
+          maxLength={16}
           error={errors.ciudad}
         />
       </View>
@@ -151,7 +158,7 @@ export default function RegisterScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0a7ea4" style={styles.loader} />
+        <ActivityIndicator size="large" color="#e07a5f" style={styles.loader} />
       ) : (
         <Button title="Registrarme" onPress={handleRegister} style={styles.button} />
       )}

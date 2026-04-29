@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Input } from '../../components/ui/input';
+import { Alert, Text, View } from 'react-native';
+import { BackButton } from '../../components/ui/BackButton';
 import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { styles } from './styles/forgot-password';
 
 export default function ForgotPasswordScreen() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
 
@@ -24,10 +24,14 @@ export default function ForgotPasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Recuperar contraseña</Text>
-      <Text style={styles.subtitle}>
-        Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
-      </Text>
+      <BackButton />
+
+      <View style={styles.header}>
+        <Text style={styles.title}>Recuperar contraseña</Text>
+        <Text style={styles.subtitle}>
+          Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
+        </Text>
+      </View>
 
       <Input
         placeholder="Correo electrónico"
@@ -49,50 +53,6 @@ export default function ForgotPasswordScreen() {
           ? 'Revisa tu bandeja de entrada y spam. El enlace puede tardar unos minutos.'
           : 'Recibirás un correo con instrucciones para restablecer tu contraseña.'}
       </Text>
-
-      <Text style={styles.backLink} onPress={() => router.push('/login')}>
-        Volver al login
-      </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 10,
-    color: '#0a7ea4',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#475569',
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-  input: {
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 8,
-  },
-  message: {
-    marginTop: 20,
-    color: '#64748b',
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  backLink: {
-    marginTop: 24,
-    color: '#0a7ea4',
-    fontSize: 15,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-  },
-});

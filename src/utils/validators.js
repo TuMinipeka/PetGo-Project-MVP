@@ -6,7 +6,7 @@ export function validateNombre(value) {
   const v = value.trim();
   if (!v) return 'El nombre es requerido.';
   if (v.length < 2) return 'Debe tener al menos 2 caracteres.';
-  if (v.length > 60) return 'No puede superar 60 caracteres.';
+  if (v.length > 16) return 'No puede superar 16 caracteres.';
   if (!SOLO_TEXTO.test(v)) return 'Solo puede contener letras y espacios.';
   return null;
 }
@@ -24,7 +24,7 @@ export function validateCiudad(value) {
   const v = value.trim();
   if (!v) return 'La ciudad o municipio es requerida.';
   if (v.length < 2) return 'Debe tener al menos 2 caracteres.';
-  if (v.length > 80) return 'No puede superar 80 caracteres.';
+  if (v.length > 16) return 'No puede superar 16 caracteres.';
   if (!SOLO_TEXTO.test(v)) return 'Solo puede contener letras y espacios.';
   return null;
 }

@@ -4,19 +4,22 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    paddingTop: 60,
+    backgroundColor: '#faf7f2',
+  },
+  header: {
+    marginBottom: 32,
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 10,
-    color: '#0a7ea4',
+    fontFamily: 'Poppins-Bold',
+    color: '#3d2b1f',
+    marginBottom: 6,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#475569',
-    marginBottom: 24,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    color: '#8c6a5d',
   },
   field: {
     marginBottom: 16,
@@ -26,11 +29,11 @@ export const styles = StyleSheet.create({
   },
   linkText: {
     marginTop: 18,
-    color: '#F97316',
+    color: '#e07a5f',
     fontSize: 15,
+    fontFamily: 'Poppins-Medium',
     textAlign: 'center',
     textDecorationLine: 'underline',
-    fontWeight: '600',
   },
   footer: {
     marginTop: 32,
@@ -39,11 +42,14 @@ export const styles = StyleSheet.create({
     gap: 6,
   },
   footerText: {
-    color: '#64748b',
+    color: '#8c6a5d',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
   },
   footerLink: {
-    color: '#F97316',
-    fontWeight: '700',
+    color: '#e07a5f',
+    fontFamily: 'Poppins-Bold',
+    fontSize: 14,
   },
   linkPressed: {
     opacity: 0.55,

@@ -139,20 +139,37 @@ Inicio (/) → Login (/login) → App principal
 
 ---
 
+## Tipografía
+
+La app usa fuentes de Google Fonts cargadas con `expo-font`:
+
+| Fuente | Variantes | Uso |
+|---|---|---|
+| **Fraunces** | Bold 700 | Logotipo "PetGo" en pantalla de bienvenida |
+| **Poppins** | Regular 400, Medium 500, Bold 700 | Títulos, cuerpo de texto y botones |
+
+Las fuentes se cargan en `app/_layout.jsx` antes de renderizar la app.
+
+---
+
 ## Estructura del proyecto
 
 ```
 PetGo/
 ├── app/                        # Pantallas y navegación (expo-router)
-│   ├── _layout.jsx             # Layout raíz
-│   ├── index.jsx               # Pantalla de inicio "/"
+│   ├── _layout.jsx             # Layout raíz — carga fuentes globales
+│   ├── index.jsx               # Pantalla de bienvenida "/"
+│   ├── index.styles.js         # Estilos de la pantalla de bienvenida
 │   └── (auth)/                 # Grupo de autenticación
 │       ├── login.jsx           # Inicio de sesión
+│       ├── login.styles.js     # Estilos de login
 │       ├── register.jsx        # Registro de usuario
+│       ├── register.styles.js  # Estilos de registro
 │       ├── forgot-password.jsx # Recuperación de contraseña
 │       └── select-role.jsx     # Selección de rol
 │
 ├── components/ui/              # Componentes reutilizables
+│   ├── BackButton.jsx          # Botón de retroceso con diseño PetGo
 │   ├── button.jsx
 │   └── input.jsx
 │

@@ -1,11 +1,12 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native';
+import { BackButton } from '../../components/ui/BackButton';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { loginUser } from '../../src/services/authService';
 import { validateLoginForm } from '../../src/utils/validators';
-import { styles } from './login.styles';
+import { styles } from './styles/login';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -44,8 +45,12 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar sesión</Text>
-      <Text style={styles.subtitle}>Ingresa tus datos para continuar</Text>
+      <BackButton />
+
+      <View style={styles.header}>
+        <Text style={styles.title}>Iniciar sesión</Text>
+        <Text style={styles.subtitle}>Ingresa tus datos para continuar</Text>
+      </View>
 
       <View style={styles.field}>
         <Input
@@ -69,7 +74,7 @@ export default function LoginScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0a7ea4" style={styles.button} />
+        <ActivityIndicator size="large" color="#e07a5f" style={styles.button} />
       ) : (
         <Button title="Ingresar" onPress={handleLogin} style={styles.button} />
       )}
